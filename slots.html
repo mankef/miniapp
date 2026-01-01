@@ -1,0 +1,20 @@
+<!doctype html>
+<html class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <title>OldMoney Slots</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/oldmany.css">
+</head>
+<body class="h-full bg-gradient-to-br from-wood via-black to-wood text-white flex flex-col items-center">
+  <h1 class="text-xl font-bold mt-4 mb-3">OldMoney Slots</h1>
+  <div id="balance" class="mb-2 text-gold"></div>
+  <div><input id="bet" type="number" placeholder="0.1 USDT" min="0.01" step="0.01" class="px-3 py-2 rounded bg-gray-900 text-gold border border-gold"></div>
+  <button onclick="startSlots()" class="om-btn mt-3 pulse">SPIN</button>
+  <canvas id="slot" width="300" height="300" class="mt-4 rounded-xl border-2 border-gold shadow-gold"></canvas>
+  <div id="win" class="mt-2 text-gold"></div>
+  <script src="js/slots.js"></script>
+</body>
+</html>
