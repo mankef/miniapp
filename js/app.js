@@ -59,13 +59,13 @@ async function withdraw() {
     alert(data.error);
   } else {
     const linkDiv = document.getElementById('withdrawLink');
-    linkDiv.innerHTML = `<button class="om-btn" onclick="alert('Check @CryptoBot for payment')">✅ ${amount} USDT Sent</button>`;
+    linkDiv.innerHTML = `<button class="om-btn" onclick="alert('Check @CryptoBot')">✅ ${amount} USDT Sent</button>`;
     linkDiv.classList.remove('hidden');
     loadUser();
   }
 }
 
-// Игра с баланса + анимация
+// Игра с анимацией
 async function playCoin(side){
   const bet = document.getElementById('bet').value;
   if(!bet||bet<=0) return alert('Enter bet');
@@ -73,7 +73,6 @@ async function playCoin(side){
   
   const clientSeed = prompt('Your seed:', Math.random().toString(36).slice(2));
   
-  // Анимация
   const coin = document.getElementById('coinAnimation');
   coin.classList.remove('hidden');
   coin.classList.add('spinning');
