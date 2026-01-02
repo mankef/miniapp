@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Referrals</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/oldmany.css">
+</head>
+<body class="h-full bg-wood p-4">
+  <h2 class="text-xl text-gold mb-4">👥 Referral Program</h2>
+  <p class="text-white mb-2">Invite friends and earn:</p>
+  <ul class="text-gold mb-4">
+    <li>5% from their deposits</li>
+    <li>2% from friends of friends</li>
+    <li>1% from their bets</li>
+  </ul>
+  
+  <div class="mb-3">
+    <label class="text-white">Your ref link:</label>
+    <input id="refLink" readonly class="w-full mt-2 px-3 py-2 bg-gray-800 text-gold rounded">
+  </div>
+  
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="bg-gray-800 rounded p-3">
+      <div class="text-gold">Referrals</div>
+      <div id="refCount" class="text-2xl text-white">0</div>
+    </div>
+    <div class="bg-gray-800 rounded p-3">
+      <div class="text-gold">Earned</div>
+      <div id="refEarn" class="text-2xl text-white">0</div>
+    </div>
+  </div>
+  
+  <button onclick="share()" class="om-btn w-full mb-3">Share Link</button>
+  <button onclick="window.history.back()" class="om-btn w-full">Back</button>
+  
+  <script>
+    const params = new URLSearchParams(location.search);
+    const code = params.get('code');
+    const tg = Telegram.WebApp;
+    
+    fetch('https://your-server.railway.app/user/'+code)
+      .then(r=>r.json())
+      .then(u=>{
+        const link = `https://t.me/SPIND_BET_BOT?start=${code}`;
+        document.getElementById('refLink').value = link;
+        document.getElementById('refCount').textContent = u.refCount;
+        document.getElementById('refEarn').textContent = u.refEarn.toFixed(2);
+      });
+    
+    function share(){
+      const link = document.getElementById('refLink').value;
+      tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(link)}`);
+    }
+  </script>
+</body>
+</html>
