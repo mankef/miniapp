@@ -25,46 +25,6 @@ async function loadUser(){
 }
 loadUser();
 
-// Пополнение – показать кнопку
-async function deposit() {
-  const amount = prompt('Amount to deposit (USDT):', '1');
-  if (!amount || amount <= 0) return;
-  const refCode = window.user.ref || null;
-  
-  const r = await fetch(SERVER+'/deposit', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({uid, amount: +amount, refCode})
-  });
-  const {invoiceUrl} = await r.json();
-  
-  const linkDiv = document.getElementById('depositLink');
-  linkDiv.innerHTML = `<a href="${invoiceUrl}" target="_blank" class="om-btn">💳 Pay ${amount} USDT</a>`;
-  linkDiv.classList.remove('hidden');
-}
-
-// Вывод – показать кнопку
-async function withdraw() {
-  const amount = prompt('Amount to withdraw (USDT):', window.user.balance.toString());
-  if (!amount || amount <= 0) return;
-  
-  const r = await fetch(SERVER+'/withdraw', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({uid, amount: +amount})
-  });
-  const data = await r.json();
-  
-  if (data.error) {
-    alert(data.error);
-  } else {
-    const linkDiv = document.getElementById('withdrawLink');
-    linkDiv.innerHTML = `<button class="om-btn" onclick="alert('Check @CryptoBot')">✅ ${amount} USDT Sent</button>`;
-    linkDiv.classList.remove('hidden');
-    loadUser();
-  }
-}
-
 // Игра с анимацией
 async function playCoin(side){
   const bet = document.getElementById('bet').value;
@@ -99,8 +59,4 @@ async function playCoin(side){
 
 function verify(serverSeed, clientSeed, hash) {
   alert(`Server Seed: ${serverSeed}\nClient Seed: ${clientSeed}\nHash: ${hash}\n\nSHA256(serverSeed) should match hash.`);
-}
-
-function openRef(){
-  tg.openLink(`${window.location.origin}/ref.html?code=${window.user.refCode}`);
 }
