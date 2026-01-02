@@ -14,14 +14,17 @@
   <div id="balance" class="text-lg mb-4 text-gold"></div>
   
   <div class="mb-4">
-    <input id="amount" type="number" placeholder="0.1 USDT" min="0.01" step="0.01" 
+    <!-- ✅ МИНИМУМ 0.2 USDT -->
+    <input id="amount" type="number" placeholder="0.20 USDT" min="0.2" step="0.01" 
            class="px-3 py-2 rounded bg-gray-900 text-gold border border-gold w-32 text-center">
+    <div class="text-xs text-gold mt-1">Minimum for check: 0.20 USDT</div>
   </div>
   
-  <button onclick="createWithdraw()" class="om-btn mb-4">Request Withdrawal</button>
+  <button onclick="createWithdraw()" class="om-btn mb-4">Create Check</button>
   
   <div id="withdrawSection" class="hidden flex flex-col items-center">
-    <a id="checkLink" href="#" target="_blank" class="om-btn mb-3">📋 Get Funds (Check)</a>
+    <!-- ✅ ОТКРЫВАЕТ ЧЕК В TELEGRAM -->
+    <a id="checkLink" href="#" target="_blank" class="om-btn mb-3">📋 Open Check</a>
     <div id="status" class="mt-3 text-gold"></div>
   </div>
   
