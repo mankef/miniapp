@@ -1,8 +1,9 @@
-const SERVER = 'https://your-server.railway.app';
+const SERVER = 'https://server-production-b3d5.up.railway.app';
 const tg = Telegram.WebApp;
 const uid = tg.initDataUnsafe.user.id;
 tg.expand();
 
+// Ripple эффект
 function addRipple(e){
   const btn = e.currentTarget;
   const circle = document.createElement('span');
@@ -24,23 +25,60 @@ async function loadUser(){
 }
 loadUser();
 
+// Пополнение
+async function deposit() {
+  const amount = prompt('Amount to deposit (USDT):', '1');
+  if (!amount || amount <= 0) return;
+  const refCode = window.user.ref; // если есть реферер
+  const r = await fetch(SERVER+'/deposit', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({uid, amount: +amount, refCode})
+  });
+  const {invoiceUrl} = await r.json();
+  tg.openLink(invoiceUrl);
+}
+
+// Вывод
+async function withdraw() {
+  const amount = prompt('Amount to withdraw (USDT):', window.user.balance.toString());
+  if (!amount || amount <= 0) return;
+  const r = await fetch(SERVER+'/withdraw', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({uid, amount: +amount})
+  });
+  const data = await r.json();
+  if (data.error) alert(data.error);
+  else alert('Withdrawal processed. Check @CryptoBot.');
+  loadUser();
+}
+
+// Игра
 async function playFair(side){
   const bet = document.getElementById('bet').value;
   if(!bet||bet<=0) return alert('Enter bet');
-  const clientSeed = prompt('Your seed (any text):', Math.random().toString(36).slice(2));
-  const r1 = await fetch(SERVER+'/fair/coin',{
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({uid, bet:+bet, side, clientSeed})
+  if (bet > window.user.balance) return alert('Insufficient balance');
+  
+  const clientSeed = prompt('Your seed:', Math.random().toString(36).slice(2));
+  const r = await fetch(SERVER+'/play/coin',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({uid, betAmount:+bet, side, clientSeed})
   });
-  const {hash, roundId} = await r1.json();
-  alert(`Round hash: ${hash}\nPay the invoice…`);
-  const r2 = await fetch(SERVER+'/play',{
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({uid, bet:+bet, side})
-  });
-  const pay = await r2.json();
-  if(pay.invoiceUrl) tg.openLink(pay.invoiceUrl);
-  else { document.getElementById('result').textContent = pay.msg; loadUser(); }
+  const {win, prize, newBalance, serverSeed, hash} = await r.json();
+  
+  document.getElementById('result').innerHTML = `
+    ${win ? '✅ WIN' : '❌ LOSS'} ${prize} USDT<br>
+    Balance: ${newBalance} USDT<br>
+    <small>Hash: ${hash.slice(0,16)}...</small><br>
+    <button onclick="verify('${serverSeed}','${clientSeed}','${hash}')" class="om-btn mt-2">Verify</button>
+  `;
+  loadUser();
+}
+
+function verify(serverSeed, clientSeed, hash) {
+  alert(`Server Seed: ${serverSeed}\nClient Seed: ${clientSeed}\nHash: ${hash}\n\nSHA256(serverSeed) should match hash.`);
 }
 
 function openRef(){
