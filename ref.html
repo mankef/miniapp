@@ -34,7 +34,7 @@
   </div>
   
   <button onclick="share()" class="om-btn w-full mb-3">📤 Share Link</button>
-  <button onclick="window.history.back()" class="om-btn w-full">⬅️ Back</button>
+  <button onclick="window.location='index.html'" class="om-btn w-full">⬅️ Back</button>
   
   <script>
     const params = new URLSearchParams(location.search);
@@ -44,7 +44,7 @@
     fetch('https://your-server.railway.app/user/'+code)
       .then(r=>r.json())
       .then(u=>{
-        document.getElementById('refLink').value = `https://t.me/SPIND_BET_BOT?start=${code}`;
+        document.getElementById('refLink').value = `https://t.me/YourCryptoCasinoBot?start=${code}`;
         document.getElementById('refCount').textContent = u.refCount;
         document.getElementById('refEarn').textContent = u.refEarn.toFixed(2);
       });
