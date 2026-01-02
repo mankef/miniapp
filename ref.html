@@ -44,7 +44,7 @@
     fetch('https://your-server.railway.app/user/'+code)
       .then(r=>r.json())
       .then(u=>{
-        document.getElementById('refLink').value = `https://t.me/YourCryptoCasinoBot?start=${code}`;
+        document.getElementById('refLink').value = `https://t.me/SPIND_BET_BOT?start=${code}`;
         document.getElementById('refCount').textContent = u.refCount;
         document.getElementById('refEarn').textContent = u.refEarn.toFixed(2);
       });
