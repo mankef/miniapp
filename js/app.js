@@ -3,7 +3,7 @@ const tg = Telegram.WebApp;
 const uid = tg.initDataUnsafe.user.id;
 tg.expand();
 
-// Ripple эффект
+// Ripple
 function addRipple(e){
   const btn = e.currentTarget;
   const circle = document.createElement('span');
@@ -25,42 +25,59 @@ async function loadUser(){
 }
 loadUser();
 
-// Пополнение
+// Пополнение – показать кнопку
 async function deposit() {
   const amount = prompt('Amount to deposit (USDT):', '1');
   if (!amount || amount <= 0) return;
-  const refCode = window.user.ref; // если есть реферер
+  const refCode = window.user.ref || null;
+  
   const r = await fetch(SERVER+'/deposit', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({uid, amount: +amount, refCode})
   });
   const {invoiceUrl} = await r.json();
-  tg.openLink(invoiceUrl);
+  
+  const linkDiv = document.getElementById('depositLink');
+  linkDiv.innerHTML = `<a href="${invoiceUrl}" target="_blank" class="om-btn">💳 Pay ${amount} USDT</a>`;
+  linkDiv.classList.remove('hidden');
 }
 
-// Вывод
+// Вывод – показать кнопку
 async function withdraw() {
   const amount = prompt('Amount to withdraw (USDT):', window.user.balance.toString());
   if (!amount || amount <= 0) return;
+  
   const r = await fetch(SERVER+'/withdraw', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({uid, amount: +amount})
   });
   const data = await r.json();
-  if (data.error) alert(data.error);
-  else alert('Withdrawal processed. Check @CryptoBot.');
-  loadUser();
+  
+  if (data.error) {
+    alert(data.error);
+  } else {
+    const linkDiv = document.getElementById('withdrawLink');
+    linkDiv.innerHTML = `<button class="om-btn" onclick="alert('Check @CryptoBot for payment')">✅ ${amount} USDT Sent</button>`;
+    linkDiv.classList.remove('hidden');
+    loadUser();
+  }
 }
 
-// Игра
-async function playFair(side){
+// Игра с баланса + анимация
+async function playCoin(side){
   const bet = document.getElementById('bet').value;
   if(!bet||bet<=0) return alert('Enter bet');
-  if (bet > window.user.balance) return alert('Insufficient balance');
+  if(bet > window.user.balance) return alert('Insufficient balance');
   
   const clientSeed = prompt('Your seed:', Math.random().toString(36).slice(2));
+  
+  // Анимация
+  const coin = document.getElementById('coinAnimation');
+  coin.classList.remove('hidden');
+  coin.classList.add('spinning');
+  
   const r = await fetch(SERVER+'/play/coin',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -68,13 +85,17 @@ async function playFair(side){
   });
   const {win, prize, newBalance, serverSeed, hash} = await r.json();
   
-  document.getElementById('result').innerHTML = `
-    ${win ? '✅ WIN' : '❌ LOSS'} ${prize} USDT<br>
-    Balance: ${newBalance} USDT<br>
-    <small>Hash: ${hash.slice(0,16)}...</small><br>
-    <button onclick="verify('${serverSeed}','${clientSeed}','${hash}')" class="om-btn mt-2">Verify</button>
-  `;
-  loadUser();
+  setTimeout(()=>{
+    coin.classList.add('hidden');
+    coin.classList.remove('spinning');
+    document.getElementById('result').innerHTML = `
+      ${win ? '✅ WIN' : '❌ LOSS'} ${prize} USDT<br>
+      Balance: ${newBalance} USDT<br>
+      <small>Hash: ${hash.slice(0,16)}...</small><br>
+      <button onclick="verify('${serverSeed}','${clientSeed}','${hash}')" class="om-btn mt-2">Verify</button>
+    `;
+    loadUser();
+  }, 2000);
 }
 
 function verify(serverSeed, clientSeed, hash) {
