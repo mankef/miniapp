@@ -10,22 +10,27 @@ async function loadBalance() {
 loadBalance();
 
 async function createWithdraw() {
-  const amount = document.getElementById('amount').value;
-  if (!amount || amount <= 0) return alert('Enter amount');
+  const amount = parseFloat(document.getElementById('amount').value);
+  
+  // ВАЛИДАЦИЯ МИНИМУМА 0.2 USDT
+  if (!amount || amount < 0.2) {
+    return alert('Minimum withdrawal is 0.20 USDT');
+  }
   
   const r = await fetch(SERVER+'/withdraw', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({uid, amount: +amount})
+    body: JSON.stringify({uid, amount})
   });
   const data = await r.json();
   
   if (data.error) {
     alert(data.error);
   } else {
-    document.getElementById('checkLink').href = data.checkUrl;
+    // ✅ ОТКРЫВАЕМ ЧЕК В TELEGRAM
+    document.getElementById('checkLink').href = data.checkLink;
     document.getElementById('withdrawSection').classList.remove('hidden');
-    document.getElementById('status').textContent = `✅ Withdrawal: ${amount} USDT`;
+    document.getElementById('status').textContent = `✅ Check created: ${amount} USDT`;
     loadBalance();
   }
 }
