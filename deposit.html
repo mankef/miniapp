@@ -1,0 +1,31 @@
+<!doctype html>
+<html class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <title>Deposit</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/oldmany.css">
+</head>
+<body class="h-full bg-wood flex flex-col items-center p-4">
+  <h1 class="text-xl font-bold mb-4 text-gold">💰 Deposit</h1>
+  
+  <div class="mb-4">
+    <input id="amount" type="number" placeholder="1.0 USDT" min="0.01" step="0.01" 
+           class="px-3 py-2 rounded bg-gray-900 text-gold border border-gold w-32 text-center">
+  </div>
+  
+  <button onclick="createDeposit()" class="om-btn mb-4">Create Invoice</button>
+  
+  <div id="invoiceSection" class="hidden flex flex-col items-center">
+    <a id="payLink" href="#" target="_blank" class="om-btn mb-3">💳 Pay</a>
+    <button onclick="checkPayment()" class="om-btn pulse">✅ I Paid - Check</button>
+    <div id="status" class="mt-3 text-gold"></div>
+  </div>
+  
+  <button onclick="window.history.back()" class="om-btn mt-4">⬅️ Back</button>
+  
+  <script src="js/deposit.js"></script>
+</body>
+</html>
