@@ -1,4 +1,4 @@
-const SERVER = 'https://server-production-b3d5.up.railway.app/';
+const SERVER = 'https://server-production-b3d5.up.railway.app';
 const tg = Telegram.WebApp;
 const uid = tg.initDataUnsafe.user.id;
 let currentInvoiceId = '';
