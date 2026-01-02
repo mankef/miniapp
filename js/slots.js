@@ -1,4 +1,4 @@
-const SERVER = 'https://your-server.railway.app';
+const SERVER = 'https://server-production-b3d5.up.railway.app';
 const tg = Telegram.WebApp;
 const uid = tg.initDataUnsafe.user.id;
 const canvas = document.getElementById('slot');
@@ -34,6 +34,8 @@ async function startSlots(){
   if(spin) return;
   const bet = document.getElementById('bet').value;
   if(!bet||bet<=0) return alert('Enter bet');
+  if(bet > window.user.balance) return alert('Insufficient balance');
+  
   spin = true;
   const r = await fetch(SERVER+'/slots/spin',{
     method:'POST', headers:{'Content-Type':'application/json'},
@@ -41,6 +43,7 @@ async function startSlots(){
   });
   const {invoiceUrl, roundId} = await r.json();
   if(invoiceUrl){ tg.openLink(invoiceUrl); spin=false; return; }
+  
   let spd = 15;
   const anim = ()=>{
     reelPos = reelPos.map((p,i)=> p + spd + i*2);
@@ -63,6 +66,6 @@ async function stopReels(roundId){
   spin=false;
   const winR = await fetch(SERVER+'/slots/win?roundId='+roundId);
   const {win, multi} = await winR.json();
-  document.getElementById('win').textContent = win ? `💰 WIN ${multi}x !` : 'No win';
+  document.getElementById('win').textContent = win ? `💰 WIN ${multi}x !` : 'No luck…';
   loadUser();
 }
