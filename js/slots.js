@@ -41,8 +41,8 @@ async function startSlots(){
     method:'POST', headers:{'Content-Type':'application/json'},
     body:JSON.stringify({uid, bet:+bet})
   });
-  const {invoiceUrl, roundId} = await r.json();
-  if(invoiceUrl){ tg.openLink(invoiceUrl); spin=false; return; }
+  const {success, roundId} = await r.json();
+  if(!success){ spin=false; return alert('Error'); }
   
   let spd = 15;
   const anim = ()=>{
@@ -65,7 +65,7 @@ async function stopReels(roundId){
   }
   spin=false;
   const winR = await fetch(SERVER+'/slots/win?roundId='+roundId);
-  const {win, multi} = await winR.json();
+  const {win, multi, newBalance} = await winR.json();
   document.getElementById('win').textContent = win ? `💰 WIN ${multi}x !` : 'No luck…';
   loadUser();
 }
