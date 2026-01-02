@@ -10,11 +10,11 @@
 </head>
 <body class="h-full bg-wood p-4">
   <h2 class="text-xl text-gold mb-4">👥 Referral Program</h2>
-  <p class="text-white mb-2">Invite friends and earn:</p>
+  <p class="text-white mb-2">Invite and earn:</p>
   <ul class="text-gold mb-4">
-    <li>5% from their deposits</li>
-    <li>2% from friends of friends</li>
-    <li>1% from their bets</li>
+    <li>5% from deposits</li>
+    <li>2% from 2nd level</li>
+    <li>1% from bets</li>
   </ul>
   
   <div class="mb-3">
@@ -33,8 +33,8 @@
     </div>
   </div>
   
-  <button onclick="share()" class="om-btn w-full mb-3">Share Link</button>
-  <button onclick="window.history.back()" class="om-btn w-full">Back</button>
+  <button onclick="share()" class="om-btn w-full mb-3">📤 Share Link</button>
+  <button onclick="window.history.back()" class="om-btn w-full">⬅️ Back</button>
   
   <script>
     const params = new URLSearchParams(location.search);
@@ -44,8 +44,7 @@
     fetch('https://your-server.railway.app/user/'+code)
       .then(r=>r.json())
       .then(u=>{
-        const link = `https://t.me/SPIND_BET_BOT?start=${code}`;
-        document.getElementById('refLink').value = link;
+        document.getElementById('refLink').value = `https://t.me/SPIND_BET_BOT?start=${code}`;
         document.getElementById('refCount').textContent = u.refCount;
         document.getElementById('refEarn').textContent = u.refEarn.toFixed(2);
       });
