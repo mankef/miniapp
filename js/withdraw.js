@@ -1,4 +1,4 @@
-const SERVER = 'https://your-server.railway.app';
+const SERVER = 'https://server-production-b3d5.up.railway.app/';
 const tg = Telegram.WebApp;
 const uid = tg.initDataUnsafe.user.id;
 
@@ -25,7 +25,7 @@ async function createWithdraw() {
   } else {
     document.getElementById('checkLink').href = data.checkUrl;
     document.getElementById('withdrawSection').classList.remove('hidden');
-    document.getElementById('status').textContent = `✅ Withdrawal processed`;
+    document.getElementById('status').textContent = `✅ Withdrawal: ${amount} USDT`;
     loadBalance();
   }
 }
