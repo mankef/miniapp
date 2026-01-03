@@ -1,31 +1,120 @@
-<!doctype html>
-<html class="h-full">
+<!DOCTYPE html>
+<html lang="en" class="h-full">
 <head>
-  <meta charset="utf-8"/>
-  <title>Deposit</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/oldmany.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIND BET - Deposit</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/spindbet.css">
 </head>
-<body class="h-full bg-wood flex flex-col items-center p-4">
-  <h1 class="text-xl font-bold mb-4 text-gold">💰 Deposit</h1>
-  
-  <div class="mb-4">
-    <input id="amount" type="number" placeholder="1.0 USDT" min="0.01" step="0.01" 
-           class="px-3 py-2 rounded bg-gray-900 text-gold border border-gold w-32 text-center">
-  </div>
-  
-  <button onclick="createDeposit()" class="om-btn mb-4">Create Invoice</button>
-  
-  <div id="invoiceSection" class="hidden flex flex-col items-center">
-    <a id="payLink" href="#" target="_blank" class="om-btn mb-3">💳 Pay</a>
-    <button onclick="checkPayment()" class="om-btn pulse">✅ I Paid - Check</button>
-    <div id="status" class="mt-3 text-gold"></div>
-  </div>
-  
-  <button onclick="window.history.back()" class="om-btn mt-4">⬅️ Back</button>
-  
-  <script src="js/deposit.js"></script>
+<body class="h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+
+    <!-- Header -->
+    <div class="w-full max-w-md mx-auto mb-6">
+        <div class="flex items-center mb-4">
+            <button onclick="goBack()" class="text-purple-400 hover:text-purple-300 mr-3 anime-btn px-3 py-1 rounded">
+                ← Back
+            </button>
+            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" style="font-family: 'Orbitron', sans-serif;">
+                💰 Deposit
+            </h1>
+        </div>
+        <div id="balance" class="text-center text-purple-200 text-lg mb-4">
+            Loading...
+        </div>
+    </div>
+
+    <!-- Deposit Form -->
+    <div class="w-full max-w-md mx-auto mb-6">
+        <div class="bg-purple-800/30 rounded-2xl p-6 border border-purple-400/30 shadow-2xl">
+            
+            <div class="mb-6">
+                <label class="block text-purple-300 text-sm mb-2" style="font-family: 'Noto Sans JP', sans-serif;">
+                    Amount (USDT)
+                </label>
+                <input type="number" id="amount" step="0.01" min="0.01" max="10000"
+                    placeholder="10.00"
+                    class="w-full px-4 py-3 bg-slate-900/50 border border-purple-400/50 rounded-xl text-white text-lg anime-input"
+                    oninput="calculateBonus()">
+                
+                <div class="mt-3 p-3 bg-purple-900/30 rounded-lg">
+                    <p class="text-xs text-purple-300">
+                        💎 Minimum: <span class="text-purple-400 font-bold">0.01 USDT</span> | 
+                        Maximum: <span class="text-purple-400 font-bold">10,000 USDT</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bonus Calculation -->
+            <div id="bonusCalc" class="mb-6 p-4 bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl border border-purple-400/30 hidden">
+                <h3 class="text-purple-300 text-sm mb-2" style="font-family: 'Noto Sans JP', sans-serif;">📊 Deposit Bonus</h3>
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                        <span class="text-purple-400">Amount:</span>
+                        <span id="depositAmount" class="text-white font-bold">0 USDT</span>
+                    </div>
+                    <div>
+                        <span class="text-pink-400">Bonus (5%):</span>
+                        <span id="bonusAmount" class="text-white font-bold">0 USDT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Invoice Button -->
+            <button onclick="createDeposit()" 
+                class="w-full anime-btn bg-gradient-to-r from-green-400 to-emerald-500 text-white font-bold py-4 rounded-xl hover:from-green-500 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-2xl">
+                <span class="flex items-center justify-center">
+                    <span class="mr-2">💎</span>
+                    CREATE DEPOSIT
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Invoice Section -->
+    <div id="invoiceSection" class="w-full max-w-md mx-auto hidden">
+        <div class="bg-slate-800/50 rounded-2xl p-6 border border-purple-400/30 shadow-2xl">
+            <h2 class="text-lg font-bold text-purple-300 mb-4">📋 Payment Details</h2>
+            
+            <div class="mb-4">
+                <p class="text-gray-400 text-xs mb-2">Click to pay:</p>
+                <a id="payLink" href="#" target="_blank" 
+                    class="block w-full text-center bg-gradient-to-r from-blue-400 to-cyan-500 text-white py-3 rounded-xl font-bold anime-btn">
+                    💳 OPEN PAYMENT
+                </a>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-gray-400 text-xs mb-2">Or scan QR code:</p>
+                <div class="flex justify-center">
+                    <img id="qrCode" src="" alt="QR Code" class="w-32 h-32 bg-white rounded-xl p-2 hidden">
+                </div>
+            </div>
+
+            <button onclick="checkPayment()" 
+                class="w-full bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold py-3 rounded-xl anime-btn">
+                <span class="flex items-center justify-center">
+                    <span class="mr-2">✅</span>
+                    I'VE PAID
+                </span>
+            </button>
+
+            <div id="status" class="mt-4 text-center text-sm font-medium"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="w-full max-w-md mx-auto mt-6 text-center">
+        <p class="text-purple-400 text-xs">
+            ⚡ Powered by Crypto Pay | 🔒 Secure & Instant
+        </p>
+    </div>
+
+    <script src="js/deposit.js"></script>
+    <script>
+        Telegram.WebApp.ready();
+    </script>
 </body>
 </html>
