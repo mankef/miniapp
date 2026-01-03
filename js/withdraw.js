@@ -1,10 +1,9 @@
 const SERVER = 'https://server-production-b3d5.up.railway.app';
 const tg = Telegram.WebApp;
 const uid = tg.initDataUnsafe.user.id;
-
 let currentBalance = 0;
 
-console.log('[SPIND BET Withdraw] Script loaded, UID:', uid);
+console.log('[WITHDRAW] Script loaded, UID:', uid);
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
@@ -18,28 +17,22 @@ async function loadBalance() {
         const response = await fetch(`${SERVER}/user/${uid}`);
         const result = await response.json();
         
-        console.log('[SPIND BET Withdraw] User response:', result);
+        console.log('[WITHDRAW] Balance response:', result);
         
-        if (result.success === false) {
-            throw new Error(result.error || 'Failed to load balance');
-        }
-        
-        currentBalance = typeof result.balance === 'number' ? result.balance : 0;
-        const balanceEl = document.getElementById('balance');
-        if (balanceEl) {
-            balanceEl.textContent = `Balance: ${currentBalance.toFixed(2)} USDT 💎`;
+        if (result.success) {
+            currentBalance = result.balance;
+            document.getElementById('balance').textContent = `${currentBalance.toFixed(2)} USDT 💎`;
+        } else {
+            document.getElementById('balance').textContent = 'Error loading balance';
         }
     } catch (error) {
-        console.error('[SPIND BET Withdraw] Load balance error:', error);
-        const balanceEl = document.getElementById('balance');
-        if (balanceEl) {
-            balanceEl.textContent = 'Balance: 0.00 USDT 💎';
-        }
+        console.error('[WITHDRAW] Load balance error:', error);
+        document.getElementById('balance').textContent = 'Error';
         currentBalance = 0;
     }
 }
 
-// Validate withdrawal amount
+// Validate amount
 function validateWithdraw() {
     const amount = parseFloat(document.getElementById('amount').value);
     const validationEl = document.getElementById('validationMessage');
@@ -75,6 +68,7 @@ function validateWithdraw() {
 // Create withdrawal check
 async function createWithdraw() {
     const amount = parseFloat(document.getElementById('amount').value);
+    console.log(`[WITHDRAW] Creating check for ${amount} USDT...`);
     
     if (!amount || amount < 0.2) {
         Telegram.WebApp.showAlert('⚠️ Minimum withdrawal is 0.20 USDT');
@@ -93,42 +87,48 @@ async function createWithdraw() {
     try {
         const response = await fetch(`${SERVER}/withdraw`, {
             method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'X-Bot-Token': tg.initData
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ uid, amount })
         });
         
         const result = await response.json();
+        console.log('[WITHDRAW] Response:', result);
         
         if (!result.success) {
             throw new Error(result.error || 'Withdrawal failed');
         }
         
+        // Показываем чек
         document.getElementById('checkLink').href = result.checkUrl;
-        document.getElementById('checkStatus').textContent = 
-            `Amount: ${amount.toFixed(2)} USDT | New Balance: ${result.newBalance.toFixed(2)} USDT`;
-        
+        document.getElementById('checkStatus').textContent = `Amount: ${amount.toFixed(2)} USDT | New Balance: ${result.newBalance.toFixed(2)} USDT`;
         document.getElementById('checkSection').classList.remove('hidden');
         
+        // Обновляем баланс
         currentBalance = result.newBalance;
-        document.getElementById('balance').textContent = `Balance: ${currentBalance.toFixed(2)} USDT 💎`;
+        document.getElementById('balance').textContent = `${currentBalance.toFixed(2)} USDT 💎`;
         
         showNotification('✅ Withdrawal check created!', 'success');
         
     } catch (error) {
-        console.error('[SPIND BET] Withdraw error:', error);
+        console.error('[WITHDRAW ERROR]', error);
         Telegram.WebApp.showAlert(`❌ ${error.message}`);
         
-        withdrawBtn.disabled = false;
-        withdrawBtn.innerHTML = `
-            <span class="flex items-center justify-center">
-                <span class="mr-2">📤</span>
-                CREATE WITHDRAWAL CHECK
-            </span>
-        `;
+        resetForm();
+    } finally {
+        resetForm();
     }
+}
+
+// Reset form
+function resetForm() {
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    withdrawBtn.disabled = false;
+    withdrawBtn.innerHTML = `
+        <span class="flex items-center justify-center">
+            <span class="mr-2">📤</span>
+            CREATE WITHDRAWAL CHECK
+        </span>
+    `;
 }
 
 // Go back
@@ -136,7 +136,7 @@ function goBack() {
     window.location.href = 'index.html';
 }
 
-// Show notification
+// Notification
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-2xl anime-notification ${
