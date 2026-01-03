@@ -46,9 +46,11 @@
                     </p>
                 </div>
 
+                <!-- Validation Message -->
                 <div id="validationMessage" class="mt-2 text-sm font-medium hidden"></div>
             </div>
 
+            <!-- Withdraw Button -->
             <button onclick="createWithdraw()" id="withdrawBtn"
                 class="w-full anime-btn bg-gradient-to-r from-pink-400 to-purple-400 text-white font-bold py-4 rounded-xl hover:from-pink-500 hover:to-purple-500 transition-all duration-300 shadow-lg hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed">
                 <span class="flex items-center justify-center">
@@ -63,16 +65,17 @@
     <div id="checkSection" class="w-full max-w-md mx-auto hidden">
         <div class="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-2xl p-6 border border-green-400/30 shadow-2xl">
             <h2 class="text-xl font-bold text-green-300 text-center mb-4">
-                ✅ Check Created!
+                ✅ Check Created Successfully!
             </h2>
             
             <p class="text-green-200 text-center mb-4">
                 Your withdrawal check is ready. Click the button below to open it in Telegram:
             </p>
 
+            <!-- Open Check Button -->
             <div class="mb-4">
                 <a id="checkLink" href="#" target="_blank"
-                    class="block w-full text-center bg-gradient-to-r from-green-400 to-emerald-500 text-white py-4 rounded-xl font-bold anime-btn">
+                    class="block w-full text-center bg-gradient-to-r from-green-400 to-emerald-500 text-white py-4 rounded-xl font-bold anime-btn hover:from-green-500 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-2xl">
                     <span class="flex items-center justify-center">
                         <span class="mr-2">📤</span>
                         OPEN CHECK IN TELEGRAM
@@ -80,21 +83,36 @@
                 </a>
             </div>
 
+            <!-- Status -->
             <div class="text-center mb-4">
-                <p class="text-green-300 text-sm" id="checkStatus"></p>
+                <p id="checkStatus" class="text-green-300 text-sm"></p>
             </div>
 
+            <!-- Back Button -->
             <button onclick="goBack()" 
-                class="w-full bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold py-3 rounded-xl anime-btn">
+                class="w-full bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold py-3 rounded-xl anime-btn hover:from-purple-500 hover:to-pink-500 transition-all duration-300">
                 ← Back to Casino
             </button>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="w-full max-w-md mx-auto mt-4">
+        <div class="bg-slate-800/30 rounded-xl p-3 border border-purple-400/20">
+            <h3 class="text-xs text-purple-400 font-bold mb-2">💡 How to withdraw:</h3>
+            <ol class="text-xs text-purple-300 space-y-1 list-decimal list-inside">
+                <li>Enter amount (0.20 USDT minimum)</li>
+                <li>Click "CREATE WITHDRAWAL CHECK"</li>
+                <li>Click "OPEN CHECK IN TELEGRAM"</li>
+                <li>Receive funds in Crypto Bot</li>
+            </ol>
         </div>
     </div>
 
     <!-- Powered by -->
     <div class="w-full max-w-md mx-auto mt-6 text-center">
         <p class="text-purple-400 text-xs">
-            🔒 Secured by Crypto Pay | Instant Withdrawals
+            🔒 Secured by <strong>Crypto Pay</strong> | Instant Withdrawals
         </p>
     </div>
 
