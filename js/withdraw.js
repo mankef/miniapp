@@ -4,15 +4,12 @@ const uid = tg.initDataUnsafe.user.id;
 
 let currentBalance = 0;
 
+console.log('[SPIND BET Withdraw] Script loaded, UID:', uid);
+
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        await loadBalance();
-        Telegram.WebApp.ready();
-    } catch (error) {
-        console.error('[SPIND BET] Withdraw init error:', error);
-        showNotification('❌ Failed to load balance', 'error');
-    }
+    Telegram.WebApp.ready();
+    await loadBalance();
 });
 
 // Load balance
@@ -21,30 +18,36 @@ async function loadBalance() {
         const response = await fetch(`${SERVER}/user/${uid}`);
         const result = await response.json();
         
+        console.log('[SPIND BET Withdraw] User response:', result);
+        
         if (result.success === false) {
             throw new Error(result.error || 'Failed to load balance');
         }
         
-        currentBalance = result.balance;
-        document.getElementById('balance').textContent = 
-            `Balance: ${currentBalance.toFixed(2)} USDT 💎`;
-        
+        currentBalance = typeof result.balance === 'number' ? result.balance : 0;
+        const balanceEl = document.getElementById('balance');
+        if (balanceEl) {
+            balanceEl.textContent = `Balance: ${currentBalance.toFixed(2)} USDT 💎`;
+        }
     } catch (error) {
-        console.error('[SPIND BET] Load balance error:', error);
-        document.getElementById('balance').textContent = '❌ Error loading balance';
-        throw error;
+        console.error('[SPIND BET Withdraw] Load balance error:', error);
+        const balanceEl = document.getElementById('balance');
+        if (balanceEl) {
+            balanceEl.textContent = 'Balance: 0.00 USDT 💎';
+        }
+        currentBalance = 0;
     }
 }
 
 // Validate withdrawal amount
 function validateWithdraw() {
-    const input = document.getElementById('amount');
+    const amount = parseFloat(document.getElementById('amount').value);
     const validationEl = document.getElementById('validationMessage');
-    const amount = parseFloat(input.value);
+    const withdrawBtn = document.getElementById('withdrawBtn');
     
     if (!amount || amount <= 0) {
         validationEl.classList.add('hidden');
-        document.getElementById('withdrawBtn').disabled = true;
+        withdrawBtn.disabled = true;
         return;
     }
     
@@ -53,19 +56,19 @@ function validateWithdraw() {
     if (amount < 0.2) {
         validationEl.textContent = '❌ Minimum withdrawal is 0.20 USDT';
         validationEl.className = 'mt-2 text-sm font-medium text-red-400';
-        document.getElementById('withdrawBtn').disabled = true;
+        withdrawBtn.disabled = true;
     } else if (amount > 1000) {
         validationEl.textContent = '❌ Maximum withdrawal is 1000 USDT';
         validationEl.className = 'mt-2 text-sm font-medium text-red-400';
-        document.getElementById('withdrawBtn').disabled = true;
+        withdrawBtn.disabled = true;
     } else if (amount > currentBalance) {
         validationEl.textContent = `❌ Insufficient balance (you have ${currentBalance.toFixed(2)} USDT)`;
         validationEl.className = 'mt-2 text-sm font-medium text-red-400';
-        document.getElementById('withdrawBtn').disabled = true;
+        withdrawBtn.disabled = true;
     } else {
         validationEl.textContent = `✅ Available for withdrawal`;
         validationEl.className = 'mt-2 text-sm font-medium text-green-400';
-        document.getElementById('withdrawBtn').disabled = false;
+        withdrawBtn.disabled = false;
     }
 }
 
@@ -73,23 +76,19 @@ function validateWithdraw() {
 async function createWithdraw() {
     const amount = parseFloat(document.getElementById('amount').value);
     
-    // Final validation
     if (!amount || amount < 0.2) {
         Telegram.WebApp.showAlert('⚠️ Minimum withdrawal is 0.20 USDT');
         return;
     }
     
     if (amount > currentBalance) {
-        Telegram.WebApp.showAlert('💔 Insufficient balance, Senpai!');
+        Telegram.WebApp.showAlert('💔 Insufficient balance!');
         return;
     }
     
     const withdrawBtn = document.getElementById('withdrawBtn');
     withdrawBtn.disabled = true;
-    withdrawBtn.innerHTML = `
-        <span class="anime-spinner inline-block mr-2"></span>
-        CREATING CHECK...
-    `;
+    withdrawBtn.innerHTML = '<span class="anime-spinner inline-block mr-2"></span>CREATING CHECK...';
     
     try {
         const response = await fetch(`${SERVER}/withdraw`, {
@@ -107,18 +106,14 @@ async function createWithdraw() {
             throw new Error(result.error || 'Withdrawal failed');
         }
         
-        // Show success
         document.getElementById('checkLink').href = result.checkUrl;
         document.getElementById('checkStatus').textContent = 
             `Amount: ${amount.toFixed(2)} USDT | New Balance: ${result.newBalance.toFixed(2)} USDT`;
         
         document.getElementById('checkSection').classList.remove('hidden');
-        document.getElementById('winSection')?.classList.add('hidden');
         
-        // Update balance
         currentBalance = result.newBalance;
-        document.getElementById('balance').textContent = 
-            `Balance: ${currentBalance.toFixed(2)} USDT 💎`;
+        document.getElementById('balance').textContent = `Balance: ${currentBalance.toFixed(2)} USDT 💎`;
         
         showNotification('✅ Withdrawal check created!', 'success');
         
