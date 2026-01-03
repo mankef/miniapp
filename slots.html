@@ -1,21 +1,81 @@
-<!doctype html>
-<html class="h-full">
+<!DOCTYPE html>
+<html lang="en" class="h-full">
 <head>
-  <meta charset="utf-8"/>
-  <title>OldMoney Slots</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/oldmany.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIND BET - Anime Slots</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/spindbet.css">
 </head>
-<body class="h-full bg-wood flex flex-col items-center p-4">
-  <h1 class="text-xl font-bold mt-2 mb-3">OldMoney Slots</h1>
-  <div id="balance" class="mb-3 text-gold"></div>
-  <div><input id="bet" type="number" placeholder="0.1 USDT" min="0.01" step="0.01" 
-              class="px-3 py-2 rounded bg-gray-900 text-gold border border-gold w-32 text-center"></div>
-  <button onclick="startSlots()" class="om-btn mt-3 pulse">SPIN</button>
-  <canvas id="slot" width="300" height="300" class="mt-4 rounded-xl border-2 border-gold shadow-gold"></canvas>
-  <div id="win" class="mt-3 text-gold"></div>
-  <script src="js/slots.js"></script>
+<body class="h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+
+    <!-- Header -->
+    <div class="w-full max-w-md mx-auto mb-4">
+        <div class="flex items-center mb-3">
+            <button onclick="goBack()" class="text-purple-400 hover:text-purple-300 mr-3 anime-btn px-3 py-1 rounded">
+                ← Back
+            </button>
+            <h1 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" style="font-family: 'Orbitron', sans-serif;">
+                🎰 Anime Slots
+            </h1>
+        </div>
+        <div id="balance" class="text-center text-purple-200">
+            Loading...
+        </div>
+    </div>
+
+    <!-- Slot Machine -->
+    <div class="w-full max-w-md mx-auto mb-6">
+        <div class="bg-gradient-to-br from-purple-900/50 to-pink-900/50 rounded-2xl p-6 border border-purple-400/30 shadow-2xl">
+            
+            <!-- Canvas -->
+            <canvas id="slot" width="300" height="300" 
+                class="w-full max-w-sm mx-auto block rounded-xl border-4 border-purple-400/50 shadow-2xl bg-slate-900/50">
+            </canvas>
+
+            <!-- Paytable -->
+            <div class="mt-4 text-xs text-purple-300">
+                <h3 class="font-bold mb-2">📊 Paytable:</h3>
+                <div class="grid grid-cols-2 gap-1">
+                    <span>💎-💎-💎 50x</span>
+                    <span>BAR-BAR-BAR 15x</span>
+                    <span>🔔-🔔-🔔 8x</span>
+                    <span>🍋-🍋-🍋 4x</span>
+                    <span>🍒-🍒-🍒 2x</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="w-full max-w-md mx-auto">
+        <div class="bg-purple-800/30 rounded-2xl p-4 border border-purple-400/30 shadow-2xl">
+            <div class="mb-4">
+                <label class="block text-purple-300 text-sm mb-2">Bet Amount (USDT)</label>
+                <input type="number" id="bet" step="0.01" min="0.01" placeholder="0.10"
+                    class="w-full px-4 py-3 bg-slate-900/50 border border-purple-400/50 rounded-xl text-white text-lg anime-input">
+            </div>
+
+            <button onclick="startSlots()" id="spinBtn"
+                class="w-full anime-btn bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold py-4 rounded-xl hover:from-purple-500 hover:to-pink-500 transition-all duration-300 shadow-lg hover:shadow-2xl disabled:opacity-50">
+                <span class="flex items-center justify-center">
+                    <span class="mr-2">🎰</span>
+                    SPIN THE REELS!
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Win Display -->
+    <div id="winSection" class="w-full max-w-md mx-auto mt-6 hidden">
+        <div class="bg-gradient-to-r from-yellow-900/50 to-orange-900/50 rounded-2xl p-4 border border-yellow-400/30 shadow-2xl">
+            <h2 id="winTitle" class="text-xl font-bold text-yellow-300 text-center mb-2"></h2>
+            <div id="winDetails" class="text-center text-yellow-200"></div>
+        </div>
+    </div>
+
+    <script src="js/slots.js"></script>
 </body>
 </html>
