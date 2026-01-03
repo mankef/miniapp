@@ -50,59 +50,59 @@
     <!-- Menu Grid -->
     <div class="w-full max-w-md grid grid-cols-2 gap-4 relative z-10">
         
-        <!-- Slots Card -->
+        <!-- Slots -->
         <a href="slots.html" class="anime-card group">
             <div class="bg-gradient-to-br from-blue-500 to-cyan-400 rounded-2xl p-6 text-center shadow-xl group-hover:shadow-2xl transition-all duration-300 anime-glow-hover">
                 <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">🎰</div>
                 <h3 class="font-bold text-white" style="font-family: 'Orbitron', sans-serif;">SLOTS</h3>
-                <p class="text-blue-100 text-xs">Spin to win!</p>
+                <p class="text-blue-100 text-xs">Up to 50x win!</p>
             </div>
         </a>
 
-        <!-- Coinflip Card -->
-        <div class="anime-card" onclick="showComingSoon()">
-            <div class="bg-gradient-to-br from-yellow-500 to-orange-400 rounded-2xl p-6 text-center shadow-xl anime-glow-hover">
-                <div class="text-4xl mb-2">🪙</div>
+        <!-- Coinflip -->
+        <a href="coinflip.html" class="anime-card group">
+            <div class="bg-gradient-to-br from-yellow-500 to-orange-400 rounded-2xl p-6 text-center shadow-xl group-hover:shadow-2xl transition-all duration-300 anime-glow-hover">
+                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">🪙</div>
                 <h3 class="font-bold text-white" style="font-family: 'Orbitron', sans-serif;">COINFLIP</h3>
-                <p class="text-yellow-100 text-xs">50/50 chance!</p>
+                <p class="text-yellow-100 text-xs">2x multiplier!</p>
             </div>
-        </div>
+        </a>
 
-        <!-- Deposit Card -->
+        <!-- Deposit -->
         <a href="deposit.html" class="anime-card group">
             <div class="bg-gradient-to-br from-green-500 to-emerald-400 rounded-2xl p-6 text-center shadow-xl group-hover:shadow-2xl transition-all duration-300 anime-glow-hover">
                 <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">💰</div>
                 <h3 class="font-bold text-white" style="font-family: 'Orbitron', sans-serif;">DEPOSIT</h3>
-                <p class="text-green-100 text-xs">Add funds</p>
+                <p class="text-green-100 text-xs">Instant & secure</p>
             </div>
         </a>
 
-        <!-- Withdraw Card -->
+        <!-- Withdraw -->
         <a href="withdraw.html" class="anime-card group">
             <div class="bg-gradient-to-br from-purple-500 to-pink-400 rounded-2xl p-6 text-center shadow-xl group-hover:shadow-2xl transition-all duration-300 anime-glow-hover">
                 <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">📤</div>
                 <h3 class="font-bold text-white" style="font-family: 'Orbitron', sans-serif;">WITHDRAW</h3>
-                <p class="text-purple-100 text-xs">Cash out</p>
+                <p class="text-purple-100 text-xs">Fast withdrawals</p>
             </div>
         </a>
 
-        <!-- Referrals Card -->
+        <!-- Referrals -->
         <a href="ref.html" class="anime-card group">
             <div class="bg-gradient-to-br from-indigo-500 to-purple-400 rounded-2xl p-6 text-center shadow-xl group-hover:shadow-2xl transition-all duration-300 anime-glow-hover">
                 <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">👥</div>
                 <h3 class="font-bold text-white" style="font-family: 'Orbitron', sans-serif;">REFERRALS</h3>
-                <p class="text-indigo-100 text-xs">Earn together!</p>
+                <p class="text-indigo-100 text-xs">Earn 5%/2%/1%</p>
             </div>
         </a>
 
-        <!-- Stats Card -->
-        <div class="anime-card" onclick="showComingSoon()">
-            <div class="bg-gradient-to-br from-red-500 to-pink-400 rounded-2xl p-6 text-center shadow-xl anime-glow-hover">
-                <div class="text-4xl mb-2">📊</div>
-                <h3 class="font-bold text-white" style="font-family: 'Orbitron', sans-serif;">STATS</h3>
+        <!-- Statistics -->
+        <a href="stats.html" class="anime-card group">
+            <div class="bg-gradient-to-br from-red-500 to-pink-400 rounded-2xl p-6 text-center shadow-xl group-hover:shadow-2xl transition-all duration-300 anime-glow-hover">
+                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">📊</div>
+                <h3 class="font-bold text-white" style="font-family: 'Orbitron', sans-serif;">STATISTICS</h3>
                 <p class="text-red-100 text-xs">Your progress</p>
             </div>
-        </div>
+        </a>
 
     </div>
 
@@ -121,10 +121,6 @@
                 document.getElementById('balance').classList.add('anime-pulse');
             }, 500);
         });
-
-        function showComingSoon() {
-            Telegram.WebApp.showAlert('✨ Coming soon, Senpai! 🌸');
-        }
     </script>
 </body>
 </html>
