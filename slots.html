@@ -26,21 +26,19 @@
         </div>
     </div>
 
-    <!-- Slot Machine -->
+    <!-- Slot Canvas -->
     <div class="w-full max-w-md mx-auto mb-6">
         <div class="bg-gradient-to-br from-purple-900/50 to-pink-900/50 rounded-2xl p-6 border border-purple-400/30 shadow-2xl">
-            
-            <!-- Canvas -->
             <canvas id="slot" width="300" height="300" 
                 class="w-full max-w-sm mx-auto block rounded-xl border-4 border-purple-400/50 shadow-2xl bg-slate-900/50">
             </canvas>
-
+            
             <!-- Paytable -->
             <div class="mt-4 text-xs text-purple-300">
                 <h3 class="font-bold mb-2">📊 Paytable:</h3>
                 <div class="grid grid-cols-2 gap-1">
                     <span>💎-💎-💎 50x</span>
-                    <span>BAR-BAR-BAR 15x</span>
+                    <span>⭐-⭐-⭐ 15x</span>
                     <span>🔔-🔔-🔔 8x</span>
                     <span>🍋-🍋-🍋 4x</span>
                     <span>🍒-🍒-🍒 2x</span>
@@ -50,7 +48,7 @@
     </div>
 
     <!-- Controls -->
-    <div class="w-full max-w-md mx-auto">
+    <div class="w-full max-w-md mx-auto mb-6">
         <div class="bg-purple-800/30 rounded-2xl p-4 border border-purple-400/30 shadow-2xl">
             <div class="mb-4">
                 <label class="block text-purple-300 text-sm mb-2">Bet Amount (USDT)</label>
@@ -68,14 +66,26 @@
         </div>
     </div>
 
-    <!-- Win Display -->
-    <div id="winSection" class="w-full max-w-md mx-auto mt-6 hidden">
-        <div class="bg-gradient-to-r from-yellow-900/50 to-orange-900/50 rounded-2xl p-4 border border-yellow-400/30 shadow-2xl">
-            <h2 id="winTitle" class="text-xl font-bold text-yellow-300 text-center mb-2"></h2>
-            <div id="winDetails" class="text-center text-yellow-200"></div>
+    <!-- Result -->
+    <div id="resultSection" class="w-full max-w-md mx-auto mb-6 hidden">
+        <div class="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-2xl p-6 border border-green-400/30 shadow-2xl">
+            <h2 id="resultTitle" class="text-xl font-bold text-center mb-4"></h2>
+            <div id="resultDetails" class="text-center"></div>
+            <button onclick="resetSlots()" 
+                class="w-full mt-4 bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold py-3 rounded-xl anime-btn">
+                Spin Again
+            </button>
         </div>
     </div>
 
-    <script src="js/slots.js"></script>
+    <!-- Fairness -->
+    <div class="w-full max-w-md mx-auto mb-6">
+        <div class="bg-slate-800/50 rounded-2xl p-4 border border-purple-400/30">
+            <h3 class="text-purple-300 text-sm mb-2">🔍 Provably Fair</h3>
+            <div id="fairData" class="text-xs text-purple-400 break-all"></div>
+        </div>
+    </div>
+
+    <script src="js/slots-new.js"></script>
 </body>
 </html>
