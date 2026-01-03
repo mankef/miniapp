@@ -1,35 +1,103 @@
-<!doctype html>
-<html class="h-full">
+<!DOCTYPE html>
+<html lang="en" class="h-full">
 <head>
-  <meta charset="utf-8"/>
-  <title>Withdraw</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/oldmany.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIND BET - Withdraw</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/spindbet.css">
 </head>
-<body class="h-full bg-wood flex flex-col items-center p-4">
-  <h1 class="text-xl font-bold mb-4 text-gold">📤 Withdraw</h1>
-  
-  <div id="balance" class="text-lg mb-4 text-gold"></div>
-  
-  <div class="mb-4">
-    <!-- ✅ МИНИМУМ 0.2 USDT -->
-    <input id="amount" type="number" placeholder="0.20 USDT" min="0.2" step="0.01" 
-           class="px-3 py-2 rounded bg-gray-900 text-gold border border-gold w-32 text-center">
-    <div class="text-xs text-gold mt-1">Minimum for check: 0.20 USDT</div>
-  </div>
-  
-  <button onclick="createWithdraw()" class="om-btn mb-4">Create Check</button>
-  
-  <div id="withdrawSection" class="hidden flex flex-col items-center">
-    <!-- ✅ ОТКРЫВАЕТ ЧЕК В TELEGRAM -->
-    <a id="checkLink" href="#" target="_blank" class="om-btn mb-3">📋 Open Check</a>
-    <div id="status" class="mt-3 text-gold"></div>
-  </div>
-  
-  <button onclick="window.history.back()" class="om-btn mt-4">⬅️ Back</button>
-  
-  <script src="js/withdraw.js"></script>
+<body class="h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
+
+    <!-- Header -->
+    <div class="w-full max-w-md mx-auto mb-6">
+        <div class="flex items-center mb-3">
+            <button onclick="goBack()" class="text-purple-400 hover:text-purple-300 mr-3 anime-btn px-3 py-1 rounded">
+                ← Back
+            </button>
+            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" style="font-family: 'Orbitron', sans-serif;">
+                📤 Withdraw
+            </h1>
+        </div>
+        <div id="balance" class="text-center text-purple-200 text-lg">
+            Loading...
+        </div>
+    </div>
+
+    <!-- Withdraw Form -->
+    <div class="w-full max-w-md mx-auto mb-6">
+        <div class="bg-purple-800/30 rounded-2xl p-6 border border-purple-400/30 shadow-2xl">
+            
+            <div class="mb-6">
+                <label class="block text-purple-300 text-sm mb-2" style="font-family: 'Noto Sans JP', sans-serif;">
+                    Amount to Withdraw (USDT)
+                </label>
+                <input type="number" id="amount" step="0.01" min="0.2" 
+                    placeholder="10.00"
+                    class="w-full px-4 py-3 bg-slate-900/50 border border-purple-400/50 rounded-xl text-white text-lg anime-input"
+                    oninput="validateWithdraw()">
+                
+                <div class="mt-3 p-3 bg-purple-900/30 rounded-lg">
+                    <p class="text-xs text-purple-300">
+                        💎 Minimum: <span class="text-purple-400 font-bold">0.20 USDT</span> | 
+                        Maximum: <span class="text-purple-400 font-bold">1,000 USDT</span>
+                    </p>
+                </div>
+
+                <div id="validationMessage" class="mt-2 text-sm font-medium hidden"></div>
+            </div>
+
+            <button onclick="createWithdraw()" id="withdrawBtn"
+                class="w-full anime-btn bg-gradient-to-r from-pink-400 to-purple-400 text-white font-bold py-4 rounded-xl hover:from-pink-500 hover:to-purple-500 transition-all duration-300 shadow-lg hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed">
+                <span class="flex items-center justify-center">
+                    <span class="mr-2">📤</span>
+                    CREATE WITHDRAWAL CHECK
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Check Section -->
+    <div id="checkSection" class="w-full max-w-md mx-auto hidden">
+        <div class="bg-gradient-to-r from-green-900/50 to-emerald-900/50 rounded-2xl p-6 border border-green-400/30 shadow-2xl">
+            <h2 class="text-xl font-bold text-green-300 text-center mb-4">
+                ✅ Check Created!
+            </h2>
+            
+            <p class="text-green-200 text-center mb-4">
+                Your withdrawal check is ready. Click the button below to open it in Telegram:
+            </p>
+
+            <div class="mb-4">
+                <a id="checkLink" href="#" target="_blank"
+                    class="block w-full text-center bg-gradient-to-r from-green-400 to-emerald-500 text-white py-4 rounded-xl font-bold anime-btn">
+                    <span class="flex items-center justify-center">
+                        <span class="mr-2">📤</span>
+                        OPEN CHECK IN TELEGRAM
+                    </span>
+                </a>
+            </div>
+
+            <div class="text-center mb-4">
+                <p class="text-green-300 text-sm" id="checkStatus"></p>
+            </div>
+
+            <button onclick="goBack()" 
+                class="w-full bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold py-3 rounded-xl anime-btn">
+                ← Back to Casino
+            </button>
+        </div>
+    </div>
+
+    <!-- Powered by -->
+    <div class="w-full max-w-md mx-auto mt-6 text-center">
+        <p class="text-purple-400 text-xs">
+            🔒 Secured by Crypto Pay | Instant Withdrawals
+        </p>
+    </div>
+
+    <script src="js/withdraw.js"></script>
 </body>
 </html>
